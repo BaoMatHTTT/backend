@@ -11,7 +11,7 @@ export const createPool = async (username: string, password: string) => {
             connectionString: config.db.connectionString,
             poolAlias: username,
             poolMin: 1,
-            poolMax: 1,
+            poolMax: 1
         })
         console.log(`Create pool with user ${username} successfully`);
     } catch (error: any) {
