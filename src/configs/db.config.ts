@@ -1,5 +1,3 @@
 export const dbConfig = {
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    connectionString: process.env.DB_CONNECTION_STRING
+    connectionString: `(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(Host=${process.env.DB_HOST})(Port=${process.env.DB_PORT}))(CONNECT_DATA=(SID=${process.env.DB_SERVICE_NAME})))`
 }

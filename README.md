@@ -11,12 +11,16 @@
 
     `npm install -i`
 
+2. Modify .env file:
+
+    - Modify PORT of Oracle Server in `DB_PORT` environment variable
+
 2. Start the server:
 
-- In development mode:
+    - In development mode:
 
-    `npm run dev`
+        `npm run dev`
 
-- In production mode:
+    - In production mode:
 
-    `npm start`
+        `npm start`
