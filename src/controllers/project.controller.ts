@@ -9,7 +9,7 @@ import OracleDB from 'oracledb';
 
 export const getAllProject = async (req: Request, res: Response) => {
     try {
-        const pool = await db.getOrCreatePool('scott', 'giacat2411');
+        const pool = await db.getOrCreatePool(req.session?.username);
         const connection = await pool.getConnection();
         const result = await connection.execute(
             'SELECT * FROM P_PROJECT NATURAL JOIN PROJECT_BUDGET',
@@ -29,7 +29,7 @@ export const getAllProject = async (req: Request, res: Response) => {
 
 export const createProject = async (req: Request, res: Response) => {
     try {
-        const pool = await db.getOrCreatePool('scott', 'giacat2411');
+        const pool = await db.getOrCreatePool(req.session?.username);
         const connection = await pool.getConnection();
         const result = await connection.execute(
             `
@@ -60,7 +60,7 @@ export const createProject = async (req: Request, res: Response) => {
 
 export const getProjectByID = async (req: Request, res: Response) => {
     try {
-        const pool = await db.getOrCreatePool('scott', 'giacat2411');
+        const pool = await db.getOrCreatePool(req.session?.username);
         const connection = await pool.getConnection();
         const result = await connection.execute(
             'SELECT * FROM P_PROJECT NATURAL JOIN PROJECT_BUDGET WHERE PROJECT_ID = :projectID',
@@ -84,7 +84,7 @@ export const getProjectByID = async (req: Request, res: Response) => {
 
 export const updateProjectByID = async (req: Request, res: Response) => {
     try {
-        const pool = await db.getOrCreatePool('scott', 'giacat2411');
+        const pool = await db.getOrCreatePool(req.session?.username);
         const connection = await pool.getConnection();
         const result = await connection.execute(
             `
@@ -121,7 +121,7 @@ export const updateProjectByID = async (req: Request, res: Response) => {
 
 export const deleteProjectByID = async (req: Request, res: Response) => {
     try {
-        const pool = await db.getOrCreatePool('scott', 'giacat2411');
+        const pool = await db.getOrCreatePool(req.session?.username);
         const connection = await pool.getConnection();
         const result = await connection.execute(
             'DELETE FROM P_PROJECT WHERE PROJECT_ID = :projectID',
@@ -141,7 +141,7 @@ export const deleteProjectByID = async (req: Request, res: Response) => {
 
 export const getProjectPersonnelByID = async (req: Request, res: Response) => {
     try {
-        const pool = await db.getOrCreatePool('scott', 'giacat2411');
+        const pool = await db.getOrCreatePool(req.session?.username);
         const connection = await pool.getConnection();
         const result = await connection.execute(
             `   
@@ -165,7 +165,7 @@ export const getProjectPersonnelByID = async (req: Request, res: Response) => {
 
 export const addProjectPersonnelByID = async (req: Request, res: Response) => {
     try {
-        const pool = await db.getOrCreatePool('scott', 'giacat2411');
+        const pool = await db.getOrCreatePool(req.session?.username);
         const connection = await pool.getConnection();
         const result = await connection.execute(
             `

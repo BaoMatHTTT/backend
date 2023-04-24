@@ -4,37 +4,37 @@ import { config } from '../configs';
 oracledb.autoCommit = true;
 
 export const getOrCreatePool = async (username: string, password: string = "") => {
+    var pool: Pool;
     try {
-        var pool: Pool;
+        pool = await oracledb.getPool(username);
+        return pool;
+    }
+    catch (error: any) {
+        console.log(`Error when get pool with username: ${username}. Message: ${error.message}`);
         try {
-            pool = await oracledb.getPool(username);
-            console.log(`Get pool with user ${username} successfully`);
-            return pool;
-        }
-        catch (error: any) {
-            console.log(`Error when get pool with username: ${username}. Message: ${error.message}`);
-            pool = await oracledb.createPool({
+            if (!password) {
+                throw Error('No password')
+            };
+                        pool = await oracledb.createPool({
                 user: username,
                 password: password,
                 connectionString: config.db.connectionString,
                 poolAlias: username,
                 poolMin: 1,
-                poolMax: 2
-            })
-            console.log(`Create pool with user ${username} successfully`);
-            return pool;
-        } 
-    } catch (error: any) {
-        console.log(`Error when get or create pool with user ${username}: ${error.message}`);
-        throw error;
-    }
+                poolMax: 2,
+            });
+            return pool;    
+        } catch (error: any) {
+            console.log(`Error when create pool with user ${username}: ${error.message}`);
+            throw error;
+        }
+    } 
 }
 
 export const deletePool = async (username: string) => {
     try {
-        const pool = await oracledb.getPool(username)
-        pool.close(0);
-        console.log(`Delete pool with user ${username} successfully`)
+        const pool = await oracledb.getPool(username);
+        await pool.close(0);
 
     } catch (error: any) {
         console.log(`Error when delete pool with user ${username}: ${error.message}`);

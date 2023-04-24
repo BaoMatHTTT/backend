@@ -7,9 +7,9 @@ import OracleDB from 'oracledb'
 // 2. Get connection from above pool with command getConnection()
 // 3. Execute SQL 
 
-export const getAllPersonnel = async (req: Request, res: Response) => {
+export const getAllPersonnels = async (req: Request, res: Response) => {
     try {
-        const pool = await db.getOrCreatePool('scott', 'giacat2411');
+        const pool = await db.getOrCreatePool(req.session?.username);
         const connection = await pool.getConnection();
         const result = await connection.execute(
             'SELECT * FROM PERSONNEL',
@@ -29,7 +29,7 @@ export const getAllPersonnel = async (req: Request, res: Response) => {
 
 export const getPersonnelByID = async (req: Request, res: Response) => {
     try {
-        const pool = await db.getOrCreatePool('scott', 'giacat2411');
+        const pool = await db.getOrCreatePool(req.session?.username);
         const connection = await pool.getConnection();
         const result = await connection.execute(
             'SELECT * FROM PERSONNEL WHERE PERSON_ID = :personID',
@@ -53,7 +53,7 @@ export const getPersonnelByID = async (req: Request, res: Response) => {
 
 export const updatePersonnelByID = async (req: Request, res: Response) => {
     try {
-        const pool = await db.getOrCreatePool('scott', 'giacat2411');
+        const pool = await db.getOrCreatePool(req.session?.username);
         const connection = await pool.getConnection();
         const result = await connection.execute(
             `

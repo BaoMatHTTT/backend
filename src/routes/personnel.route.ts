@@ -3,7 +3,7 @@ import * as personnelController from '../controllers/personnel.controller';
 
 const router: Router = express.Router();
 
-router.get('/personnels', personnelController.getAllPersonnel);
+router.get('/personnels', personnelController.getAllPersonnels);
 router.get('/personnels/:id', personnelController.getPersonnelByID);
 router.put('/personnels/:id', personnelController.updatePersonnelByID);
 

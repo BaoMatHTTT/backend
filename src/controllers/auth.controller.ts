@@ -15,11 +15,13 @@ export const login = async (req: Request, res: Response) => {
     const split_string: Array<string> = basic_auth.split(' ');
 
     if (split_string.length > 2 || split_string.length === 0 || split_string[0] != 'Basic') {
+        console.log(`Wrong credential format`)
         return res.status(400).json({ 'error': 'Wrong credential format' });
     }
 
     const credential = Buffer.from(split_string[1], 'base64').toString().split(':');
     if (credential.length !== 2) {
+        console.log(`Wrong credential format`)
         return res.status(400).json({ 'error': 'Wrong credential format' });
     }
 
@@ -40,7 +42,7 @@ export const login = async (req: Request, res: Response) => {
             userID: (user as User)?.PERSON_ID || null
         }
 
-        return res.status(200).json({ 'msg': 'Login successfully' });
+        return res.status(200).json({ 'msg': 'Login successfully', 'user': req.session });
 
     } catch (err: any) {
         console.log(`Error when login with username: ${credential[0]}. Message: ${err.message}`);
@@ -50,25 +52,12 @@ export const login = async (req: Request, res: Response) => {
 
 export const getCurrentUserInformation = async (req: Request, res: Response) => {
     try {
-        const userID = req.session?.userID;
-        const username = req.session?.username;
-
-        const pool = await db.getOrCreatePool(username);
-        const connection = await pool.getConnection();
-        const result = await connection.execute(
-            'SELECT * FROM PERSONNEL WHERE PERSON_ID = :personID',
-            { personID: userID },
-            { outFormat: OracleDB.OUT_FORMAT_OBJECT }
-        );
-        const data: Array<unknown> = result.rows ? result.rows : [];
-        
-        await connection.close();
-
-        if (data.length === 0) {
-            return res.status(500).json({ 'error': 'Something went wrong' });
+        console.log(req.session);
+        const data = {
+            userID: req.session?.userID,
+            username: req.session?.username
         }
-
-        return res.status(200).json({ 'msg': 'Get Current User Information Successfully', 'information': data });
+        return res.status(200).json({ 'msg': 'Get Current User Information Successfully', 'user': data });
 
 
     } catch (err: any) {
@@ -79,10 +68,10 @@ export const getCurrentUserInformation = async (req: Request, res: Response) => 
 
 export const logout = async (req: Request, res: Response) => {
     try {
+        console.log(req.session)
         await db.deletePool(req.session?.username);
         req.session = null;
         return res.status(200).json({ 'msg': 'Logout successfully' });
-
     } catch (err: any) {
         console.log(`Error when logout user: ${err.message}`);
         return res.status(400).json({ 'error': 'Error when logout user' });
