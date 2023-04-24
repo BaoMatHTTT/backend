@@ -19,7 +19,7 @@ app.use(cookieSession({
   name: 'ISS_SESSION_ID',
   keys: [config.server.sessionKey],
 
-  maxAge: 1 * 7 * 24 * 60 * 60 * 1000, // 1 week
+  maxAge: 24 * 60 * 60 * 1000, // 1 day
   httpOnly: true,
   sameSite: 'strict',
 }))
